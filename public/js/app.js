@@ -12,6 +12,7 @@ import { getByOrder as getPaymentsByOrder } from './payments.js';
 import { formatCurrency, showToast } from './utils.js';
 import { renderSupplyList, renderSupplyForm, getTotalByPeriod } from './supplies.js';
 import { renderBalanceView, getBalanceSummary } from './balance.js';
+import { renderStockList, renderStockForm } from './stock.js';
 
 // --- Auth State ---
 let _isAuthenticated = false;
@@ -319,6 +320,24 @@ Router.register('#/suministros/:id/editar', (params) => {
 // Balance
 Router.register('#/balance', () => {
   renderBalanceView();
+  return undefined;
+});
+
+// Stock list
+Router.register('#/stock', () => {
+  renderStockList();
+  return undefined;
+});
+
+// New stock item
+Router.register('#/stock/nuevo', () => {
+  renderStockForm();
+  return undefined;
+});
+
+// Edit stock item
+Router.register('#/stock/:id/editar', (params) => {
+  renderStockForm(params);
   return undefined;
 });
 
