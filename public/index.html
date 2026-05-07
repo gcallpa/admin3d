@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Impresión 3D</title>
+  <title>G&C Impresiones 3D</title>
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
@@ -64,18 +64,20 @@
     <!-- SPA views render here -->
   </main>
 
-  <!-- Landing page with logo (shown when not authenticated) -->
-  <div id="landing" class="landing">
-    <div class="landing-content">
-      <div id="logo-container" class="logo-container" role="button" tabindex="0" aria-label="Logo de la empresa">
+  <!-- Landing page (shown when not authenticated) -->
+  <div id="landing" class="landing" style="display: flex; flex-direction: column; min-height: 100vh; background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);">
+
+    <!-- Hero Section -->
+    <header style="text-align: center; padding: var(--space-xl) var(--space-md); position: relative;">
+      <div id="logo-container" class="logo-container" role="button" tabindex="0" aria-label="Logo de la empresa" style="padding: var(--space-lg);">
         <div class="logo">
-          <span class="logo-icon">🖨️</span>
-          <h1 class="logo-text">Impresión 3D</h1>
-          <p class="logo-subtitle">Servicios profesionales</p>
+          <span class="logo-icon" style="font-size: 3.5rem;">🖨️</span>
+          <h1 class="logo-text" style="font-size: var(--font-size-3xl); color: #fff; margin-bottom: var(--space-xs);">G&C Impresiones 3D</h1>
+          <p class="logo-subtitle" style="color: rgba(255,255,255,0.8); font-size: var(--font-size-lg); margin: 0;">Impresión 3D Profesional</p>
         </div>
       </div>
 
-      <!-- Hidden login form (revealed after 5 clicks on logo) -->
+      <!-- Hidden login form -->
       <div id="login-form-container" class="login-form-container hidden" aria-hidden="true">
         <form id="login-form" class="login-form" novalidate>
           <h2 class="login-title">Acceso Administrador</h2>
@@ -91,7 +93,139 @@
           <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
         </form>
       </div>
-    </div>
+    </header>
+
+    <!-- Video Presentación -->
+    <section style="padding: 0 var(--space-md) var(--space-xl); max-width: 900px; margin: 0 auto; width: 100%;">
+      <video autoplay muted loop playsinline style="width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);">
+        <source src="https://res.cloudinary.com/dnbv9rpx7/video/upload/v1778184629/VideoPresentaci%C3%B3n_bjfnn2.mp4" type="video/mp4">
+      </video>
+    </section>
+
+    <!-- Servicios -->
+    <section style="background: rgba(255,255,255,0.05); padding: var(--space-2xl) var(--space-md);">
+      <h2 style="text-align: center; color: #fff; font-size: var(--font-size-2xl); margin-bottom: var(--space-xl);">Nuestros Servicios</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-lg); max-width: 900px; margin: 0 auto;">
+        <div style="text-align: center; padding: var(--space-lg); background: rgba(255,255,255,0.08); border-radius: var(--radius-md);">
+          <span style="font-size: 2.5rem; display: block; margin-bottom: var(--space-sm);">🏅</span>
+          <h3 style="color: #fff; margin-bottom: var(--space-xs);">Medallas</h3>
+          <p style="color: rgba(255,255,255,0.7); font-size: var(--font-size-sm); margin: 0;">Personalizadas para eventos deportivos y premiaciones</p>
+        </div>
+        <div style="text-align: center; padding: var(--space-lg); background: rgba(255,255,255,0.08); border-radius: var(--radius-md);">
+          <span style="font-size: 2.5rem; display: block; margin-bottom: var(--space-sm);">🏆</span>
+          <h3 style="color: #fff; margin-bottom: var(--space-xs);">Trofeos y Galvanos</h3>
+          <p style="color: rgba(255,255,255,0.7); font-size: var(--font-size-sm); margin: 0;">Reconocimientos únicos para tu organización</p>
+        </div>
+        <div style="text-align: center; padding: var(--space-lg); background: rgba(255,255,255,0.08); border-radius: var(--radius-md);">
+          <span style="font-size: 2.5rem; display: block; margin-bottom: var(--space-sm);">🔑</span>
+          <h3 style="color: #fff; margin-bottom: var(--space-xs);">Llaveros</h3>
+          <p style="color: rgba(255,255,255,0.7); font-size: var(--font-size-sm); margin: 0;">Diseños personalizados para empresas y eventos</p>
+        </div>
+        <div style="text-align: center; padding: var(--space-lg); background: rgba(255,255,255,0.08); border-radius: var(--radius-md);">
+          <span style="font-size: 2.5rem; display: block; margin-bottom: var(--space-sm);">📱</span>
+          <h3 style="color: #fff; margin-bottom: var(--space-xs);">Porta Celulares</h3>
+          <p style="color: rgba(255,255,255,0.7); font-size: var(--font-size-sm); margin: 0;">Accesorios funcionales y con estilo</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galería de Trabajos -->
+    <section style="padding: var(--space-2xl) var(--space-md);">
+      <h2 style="text-align: center; color: #fff; font-size: var(--font-size-2xl); margin-bottom: var(--space-xl);">Trabajos Realizados</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--space-md); max-width: 1100px; margin: 0 auto;">
+        <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md);">
+          <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184614/GalvanosPatagon_afiuo2.jpg" alt="Galvanos Patagón" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+          <div style="background: rgba(0,0,0,0.7); padding: var(--space-sm) var(--space-md);">
+            <p style="color: #fff; margin: 0; font-size: var(--font-size-sm);">Galvanos Patagón</p>
+          </div>
+        </div>
+        <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md);">
+          <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184615/GalvanoColegio_k0eaxy.jpg" alt="Galvano Colegio" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+          <div style="background: rgba(0,0,0,0.7); padding: var(--space-sm) var(--space-md);">
+            <p style="color: #fff; margin: 0; font-size: var(--font-size-sm);">Galvano Colegio</p>
+          </div>
+        </div>
+        <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md);">
+          <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184617/MedallaPatagon_rxu4mi.jpg" alt="Medalla Patagón" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+          <div style="background: rgba(0,0,0,0.7); padding: var(--space-sm) var(--space-md);">
+            <p style="color: #fff; margin: 0; font-size: var(--font-size-sm);">Medalla Patagón</p>
+          </div>
+        </div>
+        <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md);">
+          <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184618/PortaCelularyGalvano_zqaitw.jpg" alt="Porta Celular y Galvano" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+          <div style="background: rgba(0,0,0,0.7); padding: var(--space-sm) var(--space-md);">
+            <p style="color: #fff; margin: 0; font-size: var(--font-size-sm);">Porta Celular y Galvano</p>
+          </div>
+        </div>
+        <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md);">
+          <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184614/2llaveroSumix1_nqttyg.jpg" alt="Llaveros Sumix" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+          <div style="background: rgba(0,0,0,0.7); padding: var(--space-sm) var(--space-md);">
+            <p style="color: #fff; margin: 0; font-size: var(--font-size-sm);">Llaveros Sumix</p>
+          </div>
+        </div>
+        <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md);">
+          <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184615/llaveroSumix1_yp1cge.jpg" alt="Llavero Sumix" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+          <div style="background: rgba(0,0,0,0.7); padding: var(--space-sm) var(--space-md);">
+            <p style="color: #fff; margin: 0; font-size: var(--font-size-sm);">Llavero Sumix</p>
+          </div>
+        </div>
+        <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md);">
+          <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184615/llaveroSumix3_yrfebt.jpg" alt="Llavero Sumix 3" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+          <div style="background: rgba(0,0,0,0.7); padding: var(--space-sm) var(--space-md);">
+            <p style="color: #fff; margin: 0; font-size: var(--font-size-sm);">Llavero Personalizado</p>
+          </div>
+        </div>
+        <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md);">
+          <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184616/LlaveroVikingas1_fqbetk.jpg" alt="Llavero Vikingas" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+          <div style="background: rgba(0,0,0,0.7); padding: var(--space-sm) var(--space-md);">
+            <p style="color: #fff; margin: 0; font-size: var(--font-size-sm);">Llavero Vikingas</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Videos de Trabajos -->
+    <section style="background: rgba(255,255,255,0.05); padding: var(--space-2xl) var(--space-md);">
+      <h2 style="text-align: center; color: #fff; font-size: var(--font-size-2xl); margin-bottom: var(--space-xl);">Videos</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-lg); max-width: 900px; margin: 0 auto;">
+        <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md);">
+          <video controls playsinline style="width: 100%; display: block;">
+            <source src="https://res.cloudinary.com/dnbv9rpx7/video/upload/v1778184620/GalvanoColegio_ovlgwc.mp4" type="video/mp4">
+          </video>
+          <div style="background: rgba(0,0,0,0.7); padding: var(--space-sm) var(--space-md);">
+            <p style="color: #fff; margin: 0; font-size: var(--font-size-sm);">Galvano Colegio</p>
+          </div>
+        </div>
+        <div style="border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md);">
+          <video controls playsinline style="width: 100%; display: block;">
+            <source src="https://res.cloudinary.com/dnbv9rpx7/video/upload/v1778184621/GalvanoVikinga_ihvl1x.mp4" type="video/mp4">
+          </video>
+          <div style="background: rgba(0,0,0,0.7); padding: var(--space-sm) var(--space-md);">
+            <p style="color: #fff; margin: 0; font-size: var(--font-size-sm);">Galvano Vikinga</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: var(--space-xl) var(--space-md); color: rgba(255,255,255,0.5); font-size: var(--font-size-sm);">
+      <div style="margin-bottom: var(--space-lg);">
+        <h3 style="color: #fff; font-size: var(--font-size-lg); margin-bottom: var(--space-md);">Contáctanos</h3>
+        <div style="display: flex; justify-content: center; gap: var(--space-lg); flex-wrap: wrap; margin-bottom: var(--space-md);">
+          <a href="https://www.instagram.com/gycimpresiones/" target="_blank" rel="noopener" style="color: #fff; text-decoration: none; display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-sm) var(--space-md); background: rgba(255,255,255,0.1); border-radius: var(--radius-full); transition: background 0.2s;">
+            📷 @gycimpresiones
+          </a>
+          <a href="https://wa.me/56965248343" target="_blank" rel="noopener" style="color: #fff; text-decoration: none; display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-sm) var(--space-md); background: rgba(37,211,102,0.2); border-radius: var(--radius-full); transition: background 0.2s;">
+            💬 +56 9 6524 8343
+          </a>
+          <a href="https://wa.me/56950171807" target="_blank" rel="noopener" style="color: #fff; text-decoration: none; display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-sm) var(--space-md); background: rgba(37,211,102,0.2); border-radius: var(--radius-full); transition: background 0.2s;">
+            💬 +56 9 5017 1807
+          </a>
+        </div>
+      </div>
+      <p style="margin: 0;">G&C Impresiones 3D — Impresión 3D Profesional | Punta Arenas, Chile</p>
+      <p style="margin: var(--space-xs) 0 0;">callpita@gmail.com</p>
+    </footer>
   </div>
 
   <script type="module" src="js/app.js"></script>
