@@ -21,7 +21,7 @@ import { formatDate, formatCurrency, showToast } from './utils.js';
 import { Router } from './app.js';
 import { getAll as getAllClients, getById as getClientById } from './clients.js';
 import { renderPaymentsSection, attachPaymentFormHandler } from './payments.js';
-import { getByType as getHistoryByType, DEFAULT_TYPES } from './history.js';
+import { getByType as getHistoryByType, DEFAULT_TYPES, getTypes as getHistoryTypes } from './history.js';
 
 // --- State Machine ---
 
@@ -388,10 +388,11 @@ function renderOrderRows(orders, clientMap) {
  * @param {number} index - Item index
  * @param {Object} item - Item data (for edit mode)
  * @param {boolean} canRemove - Whether the remove button should be shown
+ * @param {string[]} availableTypes - Available piece types
  * @returns {string}
  */
-function renderItemRow(index, item = {}, canRemove = true) {
-  const tipoPiezaOptions = DEFAULT_TYPES.map(t =>
+function renderItemRow(index, item = {}, canRemove = true, availableTypes = DEFAULT_TYPES) {
+  const tipoPiezaOptions = availableTypes.map(t =>
     `<option value="${t}" ${item.tipoPieza === t ? 'selected' : ''}>${t}</option>`
   ).join('');
 
@@ -475,8 +476,19 @@ export async function renderOrderForm(params = {}) {
       initialItems = [{}]; // Start with one empty item
     }
 
+    // Load available piece types (predefined + custom from Firestore)
+    let availableTypes = DEFAULT_TYPES;
+    try {
+      availableTypes = await getHistoryTypes();
+    } catch (e) {
+      // Fallback to defaults if loading fails
+    }
+
+    // Store types globally for addItemRow
+    window._orderFormTypes = availableTypes;
+
     const itemsHtml = initialItems.map((item, i) =>
-      renderItemRow(i, item, initialItems.length > 1)
+      renderItemRow(i, item, initialItems.length > 1, availableTypes)
     ).join('');
 
     const html = `
@@ -624,7 +636,7 @@ function addItemRow() {
   const rows = container.querySelectorAll('.order-item-row');
   const newIndex = rows.length;
 
-  const newRowHtml = renderItemRow(newIndex, {}, true);
+  const newRowHtml = renderItemRow(newIndex, {}, true, window._orderFormTypes || DEFAULT_TYPES);
   container.insertAdjacentHTML('beforeend', newRowHtml);
 
   // If we now have more than 1 row, ensure all rows have remove buttons

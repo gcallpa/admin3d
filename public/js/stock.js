@@ -467,10 +467,9 @@ export async function renderStockForm(params = {}) {
     }).join('');
 
     // Build color options
-    const colorOptions = FILAMENT_COLORS.map(color => {
-      const selected = item && item.color === color ? 'selected' : '';
-      return `<option value="${escapeHtml(color)}" ${selected}>${escapeHtml(color)}</option>`;
-    }).join('');
+    const colorSuggestions = FILAMENT_COLORS.map(color =>
+      `<option value="${escapeHtml(color)}">`
+    ).join('');
 
     const showFilament = selectedCategory === 'Filamentos';
 
@@ -495,9 +494,10 @@ export async function renderStockForm(params = {}) {
             </div>
             <div class="form-group">
               <label class="form-label" for="stock-color">Color *</label>
-              <select id="stock-color" class="form-select">
-                ${colorOptions}
-              </select>
+              <input type="text" id="stock-color" class="form-input" placeholder="Escribe el color" list="color-suggestions" value="${item ? escapeHtml(item.color || '') : ''}">
+              <datalist id="color-suggestions">
+                ${colorSuggestions}
+              </datalist>
             </div>
             <div class="form-group">
               <label class="form-label" for="stock-marca">Marca</label>
@@ -583,12 +583,12 @@ export async function renderStockForm(params = {}) {
     categoriaSelect.addEventListener('change', toggleFields);
 
     const tipoSelect = document.getElementById('stock-tipo');
-    const colorSelect = document.getElementById('stock-color');
+    const colorInput = document.getElementById('stock-color');
     const marcaInput = document.getElementById('stock-marca');
     const nombreAccInput = document.getElementById('stock-nombre-acc');
 
     if (tipoSelect) tipoSelect.addEventListener('change', updateFilamentName);
-    if (colorSelect) colorSelect.addEventListener('change', updateFilamentName);
+    if (colorInput) colorInput.addEventListener('input', updateFilamentName);
     if (marcaInput) marcaInput.addEventListener('input', updateFilamentName);
     if (nombreAccInput) nombreAccInput.addEventListener('input', updateAccessoryName);
 

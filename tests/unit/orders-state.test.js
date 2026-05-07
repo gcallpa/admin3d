@@ -51,6 +51,7 @@ vi.mock('../../public/js/payments.js', () => ({
 // Mock history.js
 vi.mock('../../public/js/history.js', () => ({
   getByType: vi.fn(async () => []),
+  getTypes: vi.fn(async () => ['Medallas', 'Trofeos', 'Galvanos', 'Llaveros', 'Porta celulares']),
   DEFAULT_TYPES: ['Medallas', 'Trofeos', 'Galvanos', 'Llaveros', 'Porta celulares'],
 }));
 
