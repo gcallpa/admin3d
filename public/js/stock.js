@@ -356,7 +356,8 @@ export async function renderStockList() {
             try {
               await addStock(id, cantidad);
               showToast('Stock actualizado', 'success');
-              renderStockList();
+              // Small delay to let Firestore propagate
+              setTimeout(() => renderStockList(), 500);
             } catch (error) {
               showToast('Error al actualizar stock', 'error');
             }
@@ -375,7 +376,8 @@ export async function renderStockList() {
             try {
               await subtractStock(id, cantidad);
               showToast('Stock actualizado', 'success');
-              renderStockList();
+              // Small delay to let Firestore propagate
+              setTimeout(() => renderStockList(), 500);
             } catch (error) {
               showToast('Error al actualizar stock', 'error');
             }

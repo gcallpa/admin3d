@@ -195,8 +195,17 @@
   white-space: nowrap;
 }
 
+.table tbody tr:nth-child(even) {
+  background-color: #eaf2f8 !important;
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
 .table tbody tr:hover {
-  background-color: rgba(41, 128, 185, 0.04);
+  background-color: #d4e6f1 !important;
+  cursor: pointer;
 }
 
 .table tbody tr:last-child td {
