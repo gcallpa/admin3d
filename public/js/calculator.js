@@ -12,7 +12,7 @@ import { db } from './firebase-config.js';
 import { formatCurrency, showToast } from './utils.js';
 
 // --- Tipos de pieza predefinidos ---
-const DEFAULT_TYPES = ['Medallas', 'Trofeos', 'Garbanos', 'Llaveros', 'Porta celulares'];
+const DEFAULT_TYPES = ['Medallas', 'Trofeos', 'Galvanos', 'Llaveros', 'Porta celulares'];
 
 // --- Data Functions ---
 

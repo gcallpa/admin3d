@@ -33,7 +33,7 @@ describe('History Module', () => {
 
   describe('DEFAULT_TYPES', () => {
     it('should include the 5 predefined types', () => {
-      expect(DEFAULT_TYPES).toEqual(['Medallas', 'Trofeos', 'Garbanos', 'Llaveros', 'Porta celulares']);
+      expect(DEFAULT_TYPES).toEqual(['Medallas', 'Trofeos', 'Galvanos', 'Llaveros', 'Porta celulares']);
       expect(DEFAULT_TYPES).toHaveLength(5);
     });
 
@@ -45,8 +45,8 @@ describe('History Module', () => {
       expect(DEFAULT_TYPES).toContain('Trofeos');
     });
 
-    it('should include Garbanos', () => {
-      expect(DEFAULT_TYPES).toContain('Garbanos');
+    it('should include Galvanos', () => {
+      expect(DEFAULT_TYPES).toContain('Galvanos');
     });
 
     it('should include Llaveros', () => {

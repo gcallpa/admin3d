@@ -10,6 +10,8 @@ import { renderCalculator, attachCalculatorHandlers } from './calculator.js';
 import { renderHistory } from './history.js';
 import { getByOrder as getPaymentsByOrder } from './payments.js';
 import { formatCurrency, showToast } from './utils.js';
+import { renderSupplyList, renderSupplyForm, getTotalByPeriod } from './supplies.js';
+import { renderBalanceView, getBalanceSummary } from './balance.js';
 
 // --- Auth State ---
 let _isAuthenticated = false;
@@ -296,6 +298,30 @@ Router.register('#/historial', () => {
   return undefined;
 });
 
+// Supplies list
+Router.register('#/suministros', () => {
+  renderSupplyList();
+  return undefined;
+});
+
+// New supply
+Router.register('#/suministros/nuevo', () => {
+  renderSupplyForm();
+  return undefined;
+});
+
+// Edit supply
+Router.register('#/suministros/:id/editar', (params) => {
+  renderSupplyForm(params);
+  return undefined;
+});
+
+// Balance
+Router.register('#/balance', () => {
+  renderBalanceView();
+  return undefined;
+});
+
 // --- Dashboard ---
 
 /**
@@ -347,6 +373,10 @@ async function renderDashboard() {
     const now = new Date();
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
+
+    // Get expenses and balance for current month
+    const gastosMes = await getTotalByPeriod(currentYear, currentMonth);
+    const balanceMes = await getBalanceSummary(currentYear, currentMonth);
 
     // Build month options (last 12 months)
     const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -431,6 +461,24 @@ async function renderDashboard() {
             <p>acumulada</p>
           </div>
         </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🛒 Gastos del Mes</h2>
+          </div>
+          <div class="card-body">
+            <p id="dashboard-gastos-mes" style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: var(--color-warning);">${formatCurrency(gastosMes)}</p>
+            <p>en suministros</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📊 Balance del Mes</h2>
+          </div>
+          <div class="card-body">
+            <p id="dashboard-balance-mes" style="font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold); color: ${balanceMes.balance >= 0 ? 'var(--color-success)' : 'var(--color-danger)'};">${formatCurrency(balanceMes.balance)}</p>
+            <p>${balanceMes.balance >= 0 ? '✅ Ganancia' : '❌ Pérdida'}</p>
+          </div>
+        </div>
       </div>
 
       <div class="card" style="margin-top: var(--space-lg);">
@@ -466,7 +514,7 @@ async function renderDashboard() {
     // Attach month filter handler
     const monthFilter = document.getElementById('month-filter');
     if (monthFilter) {
-      monthFilter.addEventListener('change', () => {
+      monthFilter.addEventListener('change', async () => {
         const [year, month] = monthFilter.value.split('-').map(Number);
         const filtered = orders.filter(o => {
           if (!o.creadoEn) return false;
@@ -475,13 +523,29 @@ async function renderDashboard() {
         });
         const ganancia = filtered.reduce((sum, o) => sum + ((o.precioCliente || 0) - (o.costoPropio || 0)), 0);
         const ventas = filtered.filter(o => o.estado === 'entregado').length;
+
+        // Get expenses and balance for selected month
+        const gastosFiltered = await getTotalByPeriod(year, month);
+        const balanceFiltered = await getBalanceSummary(year, month);
+
         const statsEl = document.getElementById('month-stats');
         if (statsEl) {
           statsEl.innerHTML = `
             <p><strong>Ganancia:</strong> <span style="color: var(--color-success); font-weight: var(--font-weight-bold);">${formatCurrency(ganancia)}</span></p>
             <p><strong>Productos vendidos:</strong> ${ventas}</p>
             <p><strong>Órdenes creadas:</strong> ${filtered.length}</p>
+            <p><strong>Gastos suministros:</strong> <span style="color: var(--color-warning); font-weight: var(--font-weight-bold);">${formatCurrency(gastosFiltered)}</span></p>
+            <p><strong>Balance:</strong> <span style="color: ${balanceFiltered.balance >= 0 ? 'var(--color-success)' : 'var(--color-danger)'}; font-weight: var(--font-weight-bold);">${formatCurrency(balanceFiltered.balance)}</span></p>
           `;
+        }
+
+        // Update dashboard cards
+        const gastosEl = document.getElementById('dashboard-gastos-mes');
+        if (gastosEl) gastosEl.textContent = formatCurrency(gastosFiltered);
+        const balanceEl = document.getElementById('dashboard-balance-mes');
+        if (balanceEl) {
+          balanceEl.textContent = formatCurrency(balanceFiltered.balance);
+          balanceEl.style.color = balanceFiltered.balance >= 0 ? 'var(--color-success)' : 'var(--color-danger)';
         }
       });
     }
