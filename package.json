@@ -1,0 +1,14 @@
+{
+  "name": "admin-impresion-3d",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Sistema de administración para solicitudes de impresión 3D",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "fast-check": "4.7.0",
+    "jsdom": "^29.1.1",
+    "vitest": "3.2.4"
+  }
+}

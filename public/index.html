@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Impresión 3D</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Toast notification container -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Navigation sidebar (visible when authenticated) -->
+  <nav id="sidebar" class="sidebar hidden" aria-label="Navegación principal">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Admin 3D</h2>
+      <button id="menu-toggle" class="menu-toggle" aria-label="Cerrar menú" aria-expanded="true">
+        <span class="menu-toggle-icon"></span>
+      </button>
+    </div>
+    <ul class="nav-list">
+      <li><a href="#/dashboard" class="nav-link" data-route="dashboard">
+        <span class="nav-icon">📊</span> Dashboard
+      </a></li>
+      <li><a href="#/clientes" class="nav-link" data-route="clientes">
+        <span class="nav-icon">👥</span> Clientes
+      </a></li>
+      <li><a href="#/ordenes" class="nav-link" data-route="ordenes">
+        <span class="nav-icon">📋</span> Órdenes
+      </a></li>
+      <li><a href="#/calculadora" class="nav-link" data-route="calculadora">
+        <span class="nav-icon">🧮</span> Calculadora
+      </a></li>
+      <li><a href="#/historial" class="nav-link" data-route="historial">
+        <span class="nav-icon">📈</span> Historial
+      </a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <button id="logout-btn" class="btn btn-outline btn-block">Cerrar Sesión</button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu toggle button (visible on mobile when authenticated) -->
+  <button id="mobile-menu-btn" class="mobile-menu-btn hidden" aria-label="Abrir menú" aria-expanded="false">
+    <span class="hamburger-icon"></span>
+  </button>
+
+  <!-- Overlay for mobile sidebar backdrop -->
+  <div id="sidebar-overlay" class="overlay" aria-hidden="true"></div>
+
+  <!-- Main content area -->
+  <main id="app" class="main-content">
+    <!-- SPA views render here -->
+  </main>
+
+  <!-- Landing page with logo (shown when not authenticated) -->
+  <div id="landing" class="landing">
+    <div class="landing-content">
+      <div id="logo-container" class="logo-container" role="button" tabindex="0" aria-label="Logo de la empresa">
+        <div class="logo">
+          <span class="logo-icon">🖨️</span>
+          <h1 class="logo-text">Impresión 3D</h1>
+          <p class="logo-subtitle">Servicios profesionales</p>
+        </div>
+      </div>
+
+      <!-- Hidden login form (revealed after 5 clicks on logo) -->
+      <div id="login-form-container" class="login-form-container hidden" aria-hidden="true">
+        <form id="login-form" class="login-form" novalidate>
+          <h2 class="login-title">Acceso Administrador</h2>
+          <div class="form-group">
+            <label for="login-email" class="form-label">Correo electrónico</label>
+            <input type="email" id="login-email" class="form-input" placeholder="admin@ejemplo.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="login-password" class="form-label">Contraseña</label>
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          <div id="login-error" class="form-error hidden" role="alert"></div>
+          <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
