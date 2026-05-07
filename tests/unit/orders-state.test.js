@@ -11,6 +11,8 @@ import {
   getAll,
   getByState,
   getById,
+  calculateItem,
+  calculateTotals,
 } from '../../public/js/orders.js';
 import { _resetStore, _getStore, addDoc, getDocs, getDoc, updateDoc } from '../__mocks__/firebase-firestore.js';
 
@@ -22,7 +24,7 @@ vi.mock('../../public/js/firebase-config.js', () => ({
 // Mock utils
 vi.mock('../../public/js/utils.js', () => ({
   formatDate: (ts) => ts ? '01/01/2024 12:00' : '—',
-  formatCurrency: (amount) => `$${amount}`,
+  formatCurrency: (amount) => `${amount}`,
   showToast: vi.fn(),
 }));
 
@@ -44,6 +46,12 @@ vi.mock('../../public/js/clients.js', () => ({
 vi.mock('../../public/js/payments.js', () => ({
   renderPaymentsSection: vi.fn(async () => '<div>Payments Mock</div>'),
   attachPaymentFormHandler: vi.fn(),
+}));
+
+// Mock history.js
+vi.mock('../../public/js/history.js', () => ({
+  getByType: vi.fn(async () => []),
+  DEFAULT_TYPES: ['Medallas', 'Trofeos', 'Galvanos', 'Llaveros', 'Porta celulares'],
 }));
 
 describe('Orders State Machine', () => {
@@ -105,14 +113,44 @@ describe('Orders State Machine', () => {
     });
   });
 
+  describe('calculateItem()', () => {
+    it('should calculate gramos and costoPropio for an item', () => {
+      const result = calculateItem({ tipoPieza: 'Medallas', pesoPieza: 10, cantidad: 5, extra: 100, precioCliente: 1000 });
+      expect(result.gramos).toBe(50); // 10 * 5
+      expect(result.costoPropio).toBe(900); // (50 * 16) + 100
+      expect(result.precioCliente).toBe(1000);
+      expect(result.tipoPieza).toBe('Medallas');
+    });
+
+    it('should default cantidad to 1 if not provided', () => {
+      const result = calculateItem({ pesoPieza: 20, extra: 0 });
+      expect(result.cantidad).toBe(1);
+      expect(result.gramos).toBe(20);
+      expect(result.costoPropio).toBe(320); // 20 * 16
+    });
+  });
+
+  describe('calculateTotals()', () => {
+    it('should sum costoPropio, precioCliente, and gramos from items', () => {
+      const items = [
+        { tipoPieza: 'Medallas', pesoPieza: 10, cantidad: 5, gramos: 50, extra: 0, costoPropio: 800, precioCliente: 1000 },
+        { tipoPieza: 'Trofeos', pesoPieza: 20, cantidad: 2, gramos: 40, extra: 100, costoPropio: 740, precioCliente: 900 },
+      ];
+      const totals = calculateTotals(items);
+      expect(totals.costoPropio).toBe(1540);
+      expect(totals.precioCliente).toBe(1900);
+      expect(totals.gramos).toBe(90);
+    });
+  });
+
   describe('create()', () => {
     it('should create an order with state "pedido"', async () => {
       const result = await create({
         clienteId: 'client1',
         descripcion: 'Test order',
-        gramos: 100,
-        extra: 0,
-        tipoPieza: 'Medallas',
+        items: [
+          { tipoPieza: 'Medallas', pesoPieza: 10, cantidad: 5, extra: 0, precioCliente: 1000 }
+        ],
       });
 
       expect(result).toHaveProperty('id');
@@ -126,7 +164,9 @@ describe('Orders State Machine', () => {
       await create({
         clienteId: 'client1',
         descripcion: 'Test order',
-        gramos: 50,
+        items: [
+          { tipoPieza: 'Medallas', pesoPieza: 10, cantidad: 5, extra: 0, precioCliente: 1000 }
+        ],
       });
 
       const callArgs = addDoc.mock.calls[0][1];
@@ -136,24 +176,63 @@ describe('Orders State Machine', () => {
     });
 
     it('should throw error when clienteId is missing', async () => {
-      await expect(create({ descripcion: 'No client' })).rejects.toThrow('Debe seleccionar un cliente');
+      await expect(create({ descripcion: 'No client', items: [{ tipoPieza: 'Medallas', pesoPieza: 10, cantidad: 1 }] })).rejects.toThrow('Debe seleccionar un cliente');
     });
 
     it('should throw error when descripcion is empty', async () => {
-      await expect(create({ clienteId: 'client1', descripcion: '' })).rejects.toThrow('La descripción es obligatoria');
+      await expect(create({ clienteId: 'client1', descripcion: '', items: [{ tipoPieza: 'Medallas' }] })).rejects.toThrow('La descripción es obligatoria');
     });
 
-    it('should calculate costs correctly', async () => {
+    it('should throw error when no items provided', async () => {
+      await expect(create({ clienteId: 'client1', descripcion: 'Test' })).rejects.toThrow('Debe agregar al menos una pieza');
+    });
+
+    it('should throw error when items array is empty', async () => {
+      await expect(create({ clienteId: 'client1', descripcion: 'Test', items: [] })).rejects.toThrow('Debe agregar al menos una pieza');
+    });
+
+    it('should calculate costs correctly from items', async () => {
       await create({
         clienteId: 'client1',
         descripcion: 'Cost test',
-        gramos: 100,
-        extra: 200,
+        items: [
+          { tipoPieza: 'Medallas', pesoPieza: 10, cantidad: 5, extra: 100, precioCliente: 1200 },
+          { tipoPieza: 'Trofeos', pesoPieza: 20, cantidad: 3, extra: 50, precioCliente: 1500 },
+        ],
       });
 
       const callArgs = addDoc.mock.calls[0][1];
-      expect(callArgs.costoPropio).toBe(1800); // (100 * 16) + 200
-      expect(callArgs.precioCliente).toBe(1980); // 1800 * 1.10
+      // Item 1: gramos = 10*5=50, costoPropio = (50*16)+100 = 900
+      // Item 2: gramos = 20*3=60, costoPropio = (60*16)+50 = 1010
+      expect(callArgs.items).toHaveLength(2);
+      expect(callArgs.items[0].gramos).toBe(50);
+      expect(callArgs.items[0].costoPropio).toBe(900);
+      expect(callArgs.items[1].gramos).toBe(60);
+      expect(callArgs.items[1].costoPropio).toBe(1010);
+      // Totals
+      expect(callArgs.costoPropio).toBe(1910); // 900 + 1010
+      expect(callArgs.precioCliente).toBe(2700); // 1200 + 1500
+      expect(callArgs.gramos).toBe(110); // 50 + 60
+    });
+
+    it('should store items array in the order document', async () => {
+      await create({
+        clienteId: 'client1',
+        descripcion: 'Items test',
+        items: [
+          { tipoPieza: 'Galvanos', pesoPieza: 15, cantidad: 2, extra: 0, precioCliente: 600 },
+        ],
+      });
+
+      const callArgs = addDoc.mock.calls[0][1];
+      expect(callArgs.items).toBeDefined();
+      expect(Array.isArray(callArgs.items)).toBe(true);
+      expect(callArgs.items[0].tipoPieza).toBe('Galvanos');
+      expect(callArgs.items[0].pesoPieza).toBe(15);
+      expect(callArgs.items[0].cantidad).toBe(2);
+      expect(callArgs.items[0].gramos).toBe(30);
+      expect(callArgs.items[0].costoPropio).toBe(480); // 30*16
+      expect(callArgs.items[0].precioCliente).toBe(600);
     });
   });
 
