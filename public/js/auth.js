@@ -14,7 +14,7 @@ import { setAuthenticated } from './app.js';
  */
 const Auth = {
   clickCount: 0,
-  REQUIRED_CLICKS: 5,
+  REQUIRED_CLICKS: 6,
   RESET_TIMEOUT_MS: 3000,
   clickTimer: null,
 
