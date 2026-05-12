@@ -8,6 +8,50 @@
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .gallery-item {
+      transition: transform 0.3s ease, z-index 0s;
+      cursor: pointer;
+    }
+    .gallery-item:hover {
+      transform: scale(1.15);
+      z-index: 10;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    }
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .lightbox-overlay.active {
+      display: flex;
+    }
+    .lightbox-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(255,255,255,0.1);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 2rem;
+      color: #fff;
+      font-size: 2.5rem;
+      cursor: pointer;
+      line-height: 1;
+      background: none;
+      border: none;
+    }
+  </style>
 </head>
 <body>
   <!-- Toast notification container -->
@@ -123,35 +167,35 @@
     <section id="trabajos" style="padding:5rem 2rem;background:#0a0a0a;scroll-margin-top:80px;">
       <h2 style="text-align:center;color:#fff;font-size:clamp(1.5rem,4vw,2.2rem);margin:0 0 3rem;font-weight:700;">Trabajos Realizados</h2>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;max-width:1100px;margin:0 auto;">
-        <div style="border-radius:12px;overflow:hidden;position:relative;">
+        <div class="gallery-item" style="border-radius:12px;overflow:hidden;position:relative;">
           <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184614/GalvanosPatagon_afiuo2.jpg" alt="Galvanos Patagón" style="width:100%;height:220px;object-fit:cover;display:block;">
           <div style="position:absolute;bottom:0;left:0;right:0;padding:0.6rem 1rem;background:linear-gradient(transparent,rgba(0,0,0,0.8));"><p style="color:#fff;margin:0;font-size:0.85rem;">Galvanos Patagón</p></div>
         </div>
-        <div style="border-radius:12px;overflow:hidden;position:relative;">
+        <div class="gallery-item" style="border-radius:12px;overflow:hidden;position:relative;">
           <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184615/GalvanoColegio_k0eaxy.jpg" alt="Galvano Colegio" style="width:100%;height:220px;object-fit:cover;display:block;">
           <div style="position:absolute;bottom:0;left:0;right:0;padding:0.6rem 1rem;background:linear-gradient(transparent,rgba(0,0,0,0.8));"><p style="color:#fff;margin:0;font-size:0.85rem;">Galvano Colegio</p></div>
         </div>
-        <div style="border-radius:12px;overflow:hidden;position:relative;">
+        <div class="gallery-item" style="border-radius:12px;overflow:hidden;position:relative;">
           <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184617/MedallaPatagon_rxu4mi.jpg" alt="Medalla Patagón" style="width:100%;height:220px;object-fit:cover;display:block;">
           <div style="position:absolute;bottom:0;left:0;right:0;padding:0.6rem 1rem;background:linear-gradient(transparent,rgba(0,0,0,0.8));"><p style="color:#fff;margin:0;font-size:0.85rem;">Medalla Patagón</p></div>
         </div>
-        <div style="border-radius:12px;overflow:hidden;position:relative;">
+        <div class="gallery-item" style="border-radius:12px;overflow:hidden;position:relative;">
           <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184618/PortaCelularyGalvano_zqaitw.jpg" alt="Porta Celular y Galvano" style="width:100%;height:220px;object-fit:cover;display:block;">
           <div style="position:absolute;bottom:0;left:0;right:0;padding:0.6rem 1rem;background:linear-gradient(transparent,rgba(0,0,0,0.8));"><p style="color:#fff;margin:0;font-size:0.85rem;">Porta Celular y Galvano</p></div>
         </div>
-        <div style="border-radius:12px;overflow:hidden;position:relative;">
+        <div class="gallery-item" style="border-radius:12px;overflow:hidden;position:relative;">
           <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184614/2llaveroSumix1_nqttyg.jpg" alt="Llaveros Sumix" style="width:100%;height:220px;object-fit:cover;display:block;">
           <div style="position:absolute;bottom:0;left:0;right:0;padding:0.6rem 1rem;background:linear-gradient(transparent,rgba(0,0,0,0.8));"><p style="color:#fff;margin:0;font-size:0.85rem;">Llaveros Sumix</p></div>
         </div>
-        <div style="border-radius:12px;overflow:hidden;position:relative;">
+        <div class="gallery-item" style="border-radius:12px;overflow:hidden;position:relative;">
           <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184615/llaveroSumix1_yp1cge.jpg" alt="Llavero Sumix" style="width:100%;height:220px;object-fit:cover;display:block;">
           <div style="position:absolute;bottom:0;left:0;right:0;padding:0.6rem 1rem;background:linear-gradient(transparent,rgba(0,0,0,0.8));"><p style="color:#fff;margin:0;font-size:0.85rem;">Llavero Sumix</p></div>
         </div>
-        <div style="border-radius:12px;overflow:hidden;position:relative;">
+        <div class="gallery-item" style="border-radius:12px;overflow:hidden;position:relative;">
           <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184615/llaveroSumix3_yrfebt.jpg" alt="Llavero Personalizado" style="width:100%;height:220px;object-fit:cover;display:block;">
           <div style="position:absolute;bottom:0;left:0;right:0;padding:0.6rem 1rem;background:linear-gradient(transparent,rgba(0,0,0,0.8));"><p style="color:#fff;margin:0;font-size:0.85rem;">Llavero Personalizado</p></div>
         </div>
-        <div style="border-radius:12px;overflow:hidden;position:relative;">
+        <div class="gallery-item" style="border-radius:12px;overflow:hidden;position:relative;">
           <img src="https://res.cloudinary.com/dnbv9rpx7/image/upload/v1778184616/LlaveroVikingas1_fqbetk.jpg" alt="Llavero Vikingas" style="width:100%;height:220px;object-fit:cover;display:block;">
           <div style="position:absolute;bottom:0;left:0;right:0;padding:0.6rem 1rem;background:linear-gradient(transparent,rgba(0,0,0,0.8));"><p style="color:#fff;margin:0;font-size:0.85rem;">Llavero Vikingas</p></div>
         </div>
@@ -198,6 +242,46 @@
 
   </div>
 
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox">
+    <button class="lightbox-close" aria-label="Cerrar">&times;</button>
+    <img src="" alt="Imagen ampliada" id="lightbox-img">
+  </div>
+
   <script type="module" src="js/app.js"></script>
+  <script>
+    (function() {
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const closeBtn = lightbox.querySelector('.lightbox-close');
+
+      document.querySelectorAll('.gallery-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          const img = item.querySelector('img');
+          if (img) {
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightbox.classList.add('active');
+          }
+        });
+      });
+
+      lightbox.addEventListener('click', function(e) {
+        if (e.target !== lightboxImg) {
+          lightbox.classList.remove('active');
+        }
+      });
+
+      closeBtn.addEventListener('click', function() {
+        lightbox.classList.remove('active');
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          lightbox.classList.remove('active');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
