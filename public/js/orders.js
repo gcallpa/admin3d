@@ -157,6 +157,7 @@ export async function create(data) {
     costoPropio: totals.costoPropio,
     precioCliente: totals.precioCliente,
     gramos: totals.gramos,
+    totalPagado: 0,
     historialEstados: [
       { estado: 'pedido', fecha: new Date().toISOString() }
     ],
@@ -325,6 +326,8 @@ export async function renderOrderList() {
                 <th>Cliente</th>
                 <th>Estado</th>
                 <th>Fecha</th>
+                <th>Valor Cobrado</th>
+                <th>Saldo Pendiente</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -369,12 +372,21 @@ function renderOrderRows(orders, clientMap) {
   return orders.map(order => {
     const client = clientMap[order.clienteId];
     const clientName = client ? escapeHtml(client.nombre) : '—';
+    const totalCobrado = order.precioCliente || 0;
+    const totalPagado = order.totalPagado || 0;
+    const saldoPendiente = totalCobrado - totalPagado;
+
+    // Estilo para el saldo pendiente: color rojo sutil si es mayor a cero
+    const saldoStyle = saldoPendiente > 0 ? 'color: var(--color-error); font-weight: 600;' : '';
+
     return `
       <tr>
         <td>${escapeHtml(order.descripcion || '—')}</td>
         <td>${clientName}</td>
         <td><span class="badge badge-${order.estado}">${order.estado}</span></td>
         <td>${formatDate(order.creadoEn)}</td>
+        <td>${formatCurrency(totalCobrado)}</td>
+        <td style="${saldoStyle}">${formatCurrency(saldoPendiente)}</td>
         <td>
           <a href="#/ordenes/${order.id}" class="btn btn-sm btn-ghost">Ver</a>
         </td>

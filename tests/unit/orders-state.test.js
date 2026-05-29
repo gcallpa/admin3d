@@ -161,6 +161,19 @@ describe('Orders State Machine', () => {
       expect(callArgs.estado).toBe('pedido');
     });
 
+    it('debería inicializar totalPagado en 0 al crear una orden', async () => {
+      await create({
+        clienteId: 'client1',
+        descripcion: 'Test order',
+        items: [
+          { tipoPieza: 'Medallas', pesoPieza: 10, cantidad: 5, extra: 0, precioCliente: 1000 }
+        ],
+      });
+
+      const callArgs = addDoc.mock.calls[0][1];
+      expect(callArgs.totalPagado).toBe(0);
+    });
+
     it('should include fecha in historialEstados on creation', async () => {
       await create({
         clienteId: 'client1',

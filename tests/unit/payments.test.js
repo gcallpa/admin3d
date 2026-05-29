@@ -10,7 +10,7 @@ import {
   getPaymentStatus,
   addPayment,
 } from '../../public/js/payments.js';
-import { _resetStore, _getStore, addDoc, getDocs } from '../__mocks__/firebase-firestore.js';
+import { _resetStore, _getStore, addDoc, getDocs, updateDoc } from '../__mocks__/firebase-firestore.js';
 
 // Mock the firebase-config module
 vi.mock('../../public/js/firebase-config.js', () => ({
@@ -100,6 +100,29 @@ describe('Payments Module', () => {
       expect(callArgs.monto).toBe(2000);
       expect(callArgs.fecha).toBeDefined();
       expect(callArgs.creadoEn).toBeDefined();
+    });
+
+    it('debería actualizar totalPagado en el documento de la orden al registrar un abono', async () => {
+      const store = _getStore();
+      store['ordenes'] = {
+        'order1': {
+          clienteId: 'client1',
+          descripcion: 'Test Order',
+          estado: 'pedido',
+          precioCliente: 5000,
+          historialEstados: [],
+          creadoEn: { seconds: 1000 },
+        },
+      };
+      store['pagos'] = {};
+
+      await addPayment('order1', 2000);
+
+      // Verificar que se haya llamado a updateDoc
+      expect(updateDoc).toHaveBeenCalled();
+      
+      // Verificar que el valor en el store se haya actualizado
+      expect(store['ordenes']['order1'].totalPagado).toBe(2000);
     });
 
     it('should reject payment with monto 0', async () => {

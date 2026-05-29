@@ -7,6 +7,8 @@ import {
   collection,
   getDocs,
   addDoc,
+  updateDoc,
+  doc,
   query,
   where,
   orderBy,
@@ -95,7 +97,12 @@ export async function getPaymentStatus(orderId) {
  * @returns {Promise<{ id: string }>}
  */
 export async function addPayment(orderId, monto) {
-  const balance = await getBalance(orderId);
+  const currentTotalPaid = await getTotalPaid(orderId);
+  const order = await getOrderById(orderId);
+  if (!order) {
+    throw new Error('Orden no encontrada');
+  }
+  const balance = (order.precioCliente || 0) - currentTotalPaid;
   const validation = validate(monto, balance);
   if (!validation.valid) {
     throw new Error(validation.error);
@@ -109,6 +116,15 @@ export async function addPayment(orderId, monto) {
   };
 
   const docRef = await addDoc(collection(db, 'pagos'), docData);
+
+  // Actualizar totalPagado en el documento de la orden de forma sincronizada
+  const totalPaid = currentTotalPaid + monto;
+  const orderRef = doc(db, 'ordenes', orderId);
+  await updateDoc(orderRef, {
+    totalPagado: totalPaid,
+    actualizadoEn: serverTimestamp(),
+  });
+
   return { id: docRef.id };
 }
 
